@@ -1,0 +1,55 @@
+/* app/globals.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Add your global styles here */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.ChatHistory {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Styles for SendChatInterface component */
+.SendChatInterface {
+  margin-bottom: 20px;
+}
+
+.MainForm form {
+  display: flex;
+  align-items: center;
+}
+
+.SendChatInterface label {
+  margin-right: 10px;
+}
+
+.SendChatInterface input[type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.SendChatInterface button {
+  padding: 5px 10px;
+  background-color: #333;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+}
+
+/* Styles for ChatHistory component */
+.ChatHistory p {
+  margin-bottom: 10px;
+}

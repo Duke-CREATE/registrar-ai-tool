@@ -1,0 +1,172 @@
+/* app/styles/page.css */
+
+/* Reset default margin and padding */
+/* body, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+    margin: 0;
+    padding: 0;
+  } */
+  
+  /* Set a background color for the page */
+body {
+    background-color: #ffffff;
+  }
+  
+/* main-content */
+.main-content {
+    width: 85vw; /* Adjusted to 95% of the viewport's width */
+    border: 1px solid #393939;
+    height: 75vh;
+    margin: 0 auto; /* Centered horizontally */
+    padding: 0; /* To remove any default paddings */
+    box-sizing: border-box; /* Border is included in the width and height */
+}
+
+  /* ========= */
+  /* ================ Chat Interface ================ */
+  /* ========= */
+
+  /* chat-interface */
+  /* General chat interface where the user sends input and receives responses */
+  .chat-interface {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 90%;
+    align-items: center;
+  }
+
+  /* ============= */
+  /* ============= SEND CHAT FIELD ============= */
+  /* ============= */
+  
+  /* Style the chat input */
+  .chat-input {
+    flex-grow: 1; /* Allows the input to grow and fill the available space */
+    margin-right: 10px; /* Adds some space between the input and the button */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* Ensure input takes the available space minus the space for the button */
+  }
+
+  /* chat-input input */
+  /* styles the text that goes in the chat-input */
+  .chat-input input[type="text"] {
+    flex-grow: 1; /* Allows the input to grow and fill the available space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6pxrgb(117, 117, 117)
+    /* Removed the width setting to allow flex-grow to take effect */
+  }
+
+  /* chat-input-button */
+  /* Button to send user input to system */
+  .chat-input-button {
+    padding: 8px 16px; /* Adjust padding as needed to control button size */
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    /* You can set a width if you want or leave it to be content-sized */
+  }
+
+  /* send-chat-field */
+  /* Field for user to send input to system */
+  .send-chat-field {
+    display: flex; /* Enables Flexbox */
+    align-items: center; /* Vertically centers the items in the container */
+    width: 70%;
+    margin-left: auto; /* Centers the field itself */
+    margin-right: auto; /* Centers the field itself */
+  }
+
+  /* ============= */
+  /* ============= RECOMMENDATIONS ============= */
+  /* ============= */
+
+/* input-recommendations */
+/* Recommended inputs to user */
+.input-recommendations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 70%;
+    margin: 0px auto; /* Centers the field */
+  }
+  
+  /* recommendation */
+  /* Recommended input to user */
+  .recommendation-box {
+    display: flex;
+    align-items: flex-start; /* Aligns children to the start of the cross axis */
+    text-align: left; /* Aligns text to the left */
+    background-color: #ffffff;
+    border: 1px solid #ccc; /* Adds a border */
+    border-radius: 8px;
+    padding: 0px 10px; /* Horizontal padding */
+    width: calc(50% - 75px); /* Adjust the width */
+    margin-right: 5px; /* Right margin for spacing between recommendations */
+    margin-bottom: 5px; /* Bottom margin for spacing between rows */
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    transition: background-color 0.3s; /* Add transition for smooth color change */
+  }
+
+  .recommendation-box:hover {
+    background-color: #47a9ff; /* Change the background color upon hover */
+  }  
+  
+  
+  /* Correct the right margin for every 2nd item */
+  .recommendation:nth-child(2n) {
+    margin-right: 0;
+  }
+  
+  /* ============= */
+  /* ============= CHAT WINDOW ============= */
+  /* ============= */
+
+  /* chat-window */
+  /* Where user sent input and system responses are displayed. */
+  .chat-window {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: 60%;
+  }
+
+  /* ============= */
+  /* ============= TEXT ============= */
+  /* ============= */
+
+  /* Recommendation Text */
+  /* Text for the chat input options */
+  .recommendation-text {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    padding: 0px 5px; /* Horizontal padding */
+    margin: 7px 0;
+    color:#4f4f4f;
+  }
+
+  /* Button Text */
+  /* Text for the buttons */
+  .button-text {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+  }
+
+
