@@ -13,12 +13,13 @@ import './styles/page.css';
 // Props: recommendation
 interface RecommendationProps {
   recommendation: string;
+  onSelect: (text: string) => void; // Add this line
 }
-function Recommendation({ recommendation }: RecommendationProps) {
+function Recommendation({ recommendation, onSelect }: RecommendationProps & { onSelect: (text: string) => void }) {
   return (
-    <div className="recommendation-box">
+    <button className="recommendation-box" onClick={() => onSelect(recommendation)}>
       <p className="recommendation-text">{recommendation}</p>
-    </div>
+    </button>
   );
 }
 
@@ -26,7 +27,7 @@ function Recommendation({ recommendation }: RecommendationProps) {
 // Description: A field for displaying recommendations.
 // Contains: 4 Recommendation
 // Props: None
-function InputRecommendations() {
+function InputRecommendations({ onSelect }: { onSelect: (text: string) => void }) {
   const recommendations = [
     "Courses that teach machine learning",
     "Courses about product management",
@@ -37,7 +38,7 @@ function InputRecommendations() {
   return (
     <div className="input-recommendations">
       {recommendations.map((rec, index) => (
-        <Recommendation key={index} recommendation={rec} />
+        <Recommendation key={index} recommendation={rec} onSelect={onSelect} />
       ))}
     </div>
   );
@@ -69,25 +70,27 @@ function ChatInterface() {
     }
   };
 
-  console.log('Messages to render:', messages); // Debugging log for messages array
+  const handleRecommendationSelect = (text: string) => {
+    setMessages(prevMessages => [...prevMessages, text]);
+  };
 
   return (
-      <div className="chat-interface">
-          <div className="send-chat-field">
-              <input type="text" className="chat-input" ref={inputRef} />
-              <button className="chat-input-button" onClick={() => console.log('Button clicked')}>
-                Send
-              </button>
-          </div>
-          <div>
-              <InputRecommendations />
-          </div>
-          <div className="chat-window">
-              {messages.map((message, index) => (
-                  <p key={index}>{message}</p>
-              ))}
-          </div>
+    <div className="main-content">
+      <div className="send-chat-field">
+        <input type="text" className="chat-input" ref={inputRef} />
+        <button className="chat-input-button" onClick={handleSendMessage}>
+          Send
+        </button>
       </div>
+      <div>
+        <InputRecommendations onSelect={handleRecommendationSelect} />
+      </div>
+      <div className="chat-window">
+        {messages.map((message, index) => (
+        <p className="chat-text" key={index}> <p>You: </p>{message}</p>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -102,8 +105,6 @@ function ChatInterface() {
 // Props: None
 export default function Page() {
   return (
-    <div className="main-content">
-      <ChatInterface />
-    </div>
+    <ChatInterface />
   );
 }

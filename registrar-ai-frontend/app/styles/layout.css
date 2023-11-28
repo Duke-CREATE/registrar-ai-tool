@@ -1,4 +1,12 @@
 /* app/styles/layout.css */
+
+html, body {
+  height: 100%; /* Make sure html and body take up the full viewport height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -10,7 +18,7 @@
 }
   
 .header {
-  padding: 5px;
+  padding: 0px;
   text-align: center;
 }
   
@@ -22,7 +30,7 @@
   
 .footer {
   text-align: center;
-  padding: 10px; /* Ensure this padding does not push the footer out of view */
+  padding: 0px; /* Ensure this padding does not push the footer out of view */
 }
 
 /* Main Title Text */
