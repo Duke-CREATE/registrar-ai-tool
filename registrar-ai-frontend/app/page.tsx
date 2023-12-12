@@ -53,22 +53,55 @@ function InputRecommendations({ onSelect }: { onSelect: (text: string) => void }
 // Contains: None
 // Props: None
 function ChatInterface() {
+  // messages initialized as an empty array
   const [messages, setMessages] = useState<string[]>([]);
+  // inputRef initialized as a null reference
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSendMessage = () => {
-    console.log('handleSendMessage called'); // Debugging log
+  // asynchronous function handleSendMessage
+  // async keyword indicates that the function will preform asynchronous operations
+  // uses the await keyword to wait for promises to resolve (fetch to complete)
+  const handleSendMessage = async () => {
     if (inputRef.current && inputRef.current.value.trim() !== '') {
-      const message = inputRef.current.value;
-      setMessages(prevMessages => {
-        console.log('New message:', message); // Debugging log for new message
-        return [...prevMessages, message];
-      });
+      const userMessage = inputRef.current.value;
+
+      console.log('Sending message:', userMessage);
+      
+      // Clear the input field
       inputRef.current.value = '';
-    } else {
-      console.log('Input is empty or ref is not set'); // Debugging log for empty input
-    }
-  };
+
+      // Update the local state to display the user message
+      setMessages(prevMessages => [...prevMessages, `You: ${userMessage}`]);
+
+      // Send the message to the backend
+      try {
+        const response = await fetch('http://127.0.0.1:5000/process_message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_message: userMessage }),
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log('Response received:', responseData);
+
+          // Check if responseData is not empty
+          // and update the local state to display the backend response
+          if (responseData.response) {
+            setMessages(prevMessages => [...prevMessages, `Reply: ${responseData.response}`]);
+          }
+        } else {
+          console.error('Failed to send message');
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+      } else {
+      console.log('Input is empty or ref is not set');
+      }
+    };
 
   const handleRecommendationSelect = (text: string) => {
     setMessages(prevMessages => [...prevMessages, text]);
@@ -87,7 +120,7 @@ function ChatInterface() {
       </div>
       <div className="chat-window">
         {messages.map((message, index) => (
-        <p className="chat-text" key={index}> <p>You: </p>{message}</p>
+        <p className="chat-text" key={index}>{message}</p>
         ))}
       </div>
     </div>
