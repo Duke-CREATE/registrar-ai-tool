@@ -10,7 +10,7 @@ def create_context(matches):
     :param similar_vectors: A list of dictionaries with keys 'id' and 'score'.
     :return: A string representing the context.
     """
-    courses_info = ""
+    results = {}
     with sqlite3.connect('data/coursesDB.db') as conn:
         cursor = conn.cursor()
         for match in matches:
@@ -41,11 +41,13 @@ def create_context(matches):
                 'term': result[5]
             }
 
+            # Add result to dictionary of results
+            results[course_id] = result_dict
             # Format the result dictionary into a string
-            course_info_str = ', '.join([f"{key}: {value}" for key, value in result_dict.items()])
-            courses_info += course_info_str + "\n"
+            # course_info_str = ', '.join([f"{key}: {value}" for key, value in result_dict.items()])
+            # courses_info += course_info_str + "\n"
 
-    return courses_info
+    return results
 
 
 def generate_openai_response(user_message, courses_info):
@@ -62,7 +64,7 @@ def generate_openai_response(user_message, courses_info):
     context = (
         "You are a helpful course registration assistant at Duke University. "
         "Your task is to answer questions about courses confidently and in a friendly manner. "
-        "Keep your answers short, concise, and conversational. "
+        "Keep your answers short, concise, and conversational. Only give the user the information they're asking for. "
         "If the information provided does not allow you to answer a question, respond with 'Sorry, I'm not equipped to answer that question'.'\n\n"
         "Courses Information:\n"
         f"{courses_info}\n\n"

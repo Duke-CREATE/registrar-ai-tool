@@ -13,6 +13,7 @@ def process_message():
     # Extract 'user_message' from the request
     data = request.get_json()
     user_message = data.get('user_message')
+    # conversation_history = data.get('conversation_history')
 
     # Ensure user_message is provided
     if not user_message:
