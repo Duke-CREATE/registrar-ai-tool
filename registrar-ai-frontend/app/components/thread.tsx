@@ -6,6 +6,7 @@ export interface Message {
   text: string;
   fromUser: boolean;
   threadId?: string; // Make sure types are consistent, changed from number to string
+  isParent?: boolean;
 }
 
 export interface ThreadProps {
@@ -16,29 +17,39 @@ export interface ThreadProps {
 }
 
 const Thread: React.FC<ThreadProps> = ({ parentMessage, childMessages, isThreadActive, onClick }) => {
-  return (
-      <div className="all-messages">
-          <div 
-              className={`message-box ${isThreadActive ? 'message-box-selected' : ''}`} 
-              onClick={onClick}
-          >
-              <span className="chat-text">
-                  <strong>{parentMessage.fromUser ? 'User:' : 'Atlas:'}</strong> {parentMessage.text}
-              </span>
-          </div>
-          {childMessages.map((child, index) => (
-              <div 
-                  className="message-box child-message" 
-                  key={index}
-                  style={{ marginLeft: '20px' }}
-              >
-                  <span className="chat-text">
-                      <strong>{child.fromUser ? 'User:' : 'Atlas:'}</strong> {child.text}
-                  </span>
-              </div>
-          ))}
-      </div>
-  );
+    // Determine if this message should have clickable behavior
+    const isClickable = parentMessage.isParent && !parentMessage.fromUser;
+    const messageBoxClass = `message-box ${isThreadActive ? 'message-box-selected' : ''} ${isClickable ? 'hoverable-clickable' : ''}`;
+
+    return (
+        <div className="all-messages">
+            {/* Parent Message */}
+            <div 
+                className={messageBoxClass}
+                onClick={() => isClickable && onClick()}
+            >
+                <span className="chat-text">
+                    <strong>{parentMessage.fromUser ? 'User:' : 'Atlas:'}</strong> {parentMessage.text}
+                </span>
+            </div>
+
+            {/* Child Messages */}
+            {childMessages.length > 0 && (
+                <div className="thread-children-container">
+                    {childMessages.map((child, index) => (
+                        <div 
+                            className="message-box child-message" 
+                            key={index}
+                        >
+                            <span className="chat-text">
+                                <strong>{child.fromUser ? 'User:' : 'Atlas:'}</strong> {child.text}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default Thread;

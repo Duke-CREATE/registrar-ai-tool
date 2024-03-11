@@ -11,7 +11,7 @@
   align-items: center; /* Center children vertically in the cross axis */
   width: 60%; /* Take the full width of its parent */
   margin: 0 auto; /* Center the container within its parent */
-  padding: 8px; /* Add padding around the content for spacing */
+  padding: 0px; /* Add padding around the content for spacing */
   margin-top: 0px;
 }
 
@@ -29,18 +29,44 @@
   height: 100%; /* Make sure the container takes full height of its parent */
 }
 
+.chat-field {
+  display: flex; /* Align the icon and the text input side by side */
+  flex-direction: row; /* Arrange children horizontally */
+  align-items: center; /* Center children vertically */
+  width: 100%; /* Ensure it takes up all available horizontal space */
+  border-radius: 12px; /* Rounded corners for the container */
+  border: 2px solid darkblue; /* Example border - change as needed */
+  padding: 0px; /* Space inside around the content and the icon */
+}
+
+.follow-up-icon {
+  height: 30px; /* Adjust based on your icon's size */
+  margin: 0px; /* Adds some space between the icon and the text input */
+  vertical-align: middle; /* Aligns the icon with the text */
+  padding-left: 6px;
+  padding-right: 0px;
+}
+
 /* ContentEditable div style */
 .chat-input-content {
   width: 100%; /* Make the contentEditable div fill the entire width of its container */
-  padding: 10px 12px 6px; /* Add padding inside for the text, a bit more on the left for spacing */
-  border: 2px solid #0024A5; /* Specify border color and thickness */
-  border-radius: 12px; /* Rounded corners for the border */
-  min-height: 24px; /* Minimum height to ensure it's visible even if empty */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-height: 20px; /* Minimum height to ensure it's visible even if empty */
   outline: none; /* Remove the default focus outline */
   text-align: left; /* Align the text to the left */
   font-family: 'Arial', sans-serif; /* Set the font family */
   font-size: 16px; /* Set the font size */
   display: block; /* Display block to ensure it fills the width */
+}
+
+.chat-input-content:empty:before {
+  content: attr(data-placeholder);
+  color: #b0b0b0; /* Placeholder text color */
+  pointer-events: none; /* Prevents clicking on the placeholder text */
+  display: block; /* Needed for the content to show */
 }
 
   /* send-chat-field */
@@ -141,7 +167,7 @@
   width: 100%; /* Take the full width to align with the contentEditable div */
   margin-bottom: 0px; /* Adjust space between the buttons and the contentEditable div as needed */
   padding: 0px; /* Add padding to the left and right of the buttons */
-  margin-top: 0px;
+  margin-top: 8px;
 }
 
 .query-type-button {
@@ -168,11 +194,5 @@
 /* Remove the right margin from the last button to maintain layout */
 .query-type-button:last-child {
   margin-right: 0;
-}
-
-.follow-up-icon {
-  height: 24px; /* Adjust based on your icon's size */
-  margin-right: 8px; /* Adds some space between the icon and the text input */
-  vertical-align: middle; /* Aligns the icon with the text */
 }
 

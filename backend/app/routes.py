@@ -39,6 +39,10 @@ def process_message():
     relevant_info = []
     # if we are in a thread
     if conversation_history:
+        # response inherits parent thread thread_id
+        response_thread_id = thread_id
+        # response is not a parent
+        is_parent = False
         print()
         print('CONVERSATION CACHE START')
         print(CONVERSATION_CACHE[thread_id])
@@ -59,6 +63,10 @@ def process_message():
             relevant_info.extend(tag_context)
     # else we are not in a thread
     else:
+        # generate new threadid
+        response_thread_id = str(uuid.uuid4())
+        # response is a parent
+        is_parent = True
         # if tags are provided, fetch context from tags
         if tags:
             relevant_info = context_from_tags(tags)
@@ -81,7 +89,6 @@ def process_message():
         response = generate_openai_response(user_message, relevant_info)
         # append the response to the conversation cache
         # generate new threadid using current timestamp
-        response_thread_id = str(uuid.uuid4())
         if response_thread_id in CONVERSATION_CACHE:
             CONVERSATION_CACHE[response_thread_id].append({'message': response, 'context': relevant_info, 'fromUser': False})
         else:
@@ -93,6 +100,6 @@ def process_message():
         print(response_thread_id)
         print('RESPONSE END')
 
-        return jsonify({'response': response, 'threadId': response_thread_id})
+        return jsonify({'response': response, 'threadId': response_thread_id, 'isParent': is_parent})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

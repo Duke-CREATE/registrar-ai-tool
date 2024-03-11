@@ -1,29 +1,52 @@
-  /* thread.css */
-
-  .all-messages {
-    width: 100%; /* Ensure the container takes up the full width */
-    display: flex; /* Use flex layout to organize children */
-    flex-direction: column; /* Stack children vertically */
-    gap: 10px; /* Space between each message */
+/* thread.css */
+.all-messages {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .message-box {
     cursor: pointer;
     width: 100%; /* Ensure each message box takes up full width */
-    display: flex; /* Align items in a flex layout for consistency */
-    align-items: center; /* Center-align the items vertically */
+    display: flex; /* Use flex layout for consistent alignment */
+    align-items: flex-start; /* Align items to the start of the flex container */
     padding: 8px; /* Padding inside each message box */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    word-break: break-word; /* Ensure long words do not cause overflow */
 }
 
-.message-box:hover, .message-box-selected {
-    background-color: rgba(221, 221, 221, 0.5); /* Transparency on hover and when selected */
+.message-box.hoverable-clickable:hover, .message-box.hoverable-clickable.message-box-selected {
+    background-color: rgba(221, 221, 221, 0.5);
     border-radius: 12px;
+    cursor: pointer;
+}
+
+.message-box:not(.hoverable-clickable) {
+    cursor: default; /* Or 'auto', depending on what you prefer */
+}
+
+.thread-children-container {
+    position: relative;
+    margin-left: 28px; /* Adjust based on your design */
+    width: calc(100% - 28px); /* Adjust width to account for margin, preventing overflow */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.thread-children-container::before {
+    content: '';
+    position: absolute;
+    left: 0px; /* Place it right on the edge of the container, adjust if needed */
+    top: 0;
+    bottom: 0;
+    width: 2px; /* Width of the vertical line */
+    background-color: #ccc; /* Visible color for the vertical line */
+    z-index: 0; /* Adjust based on your layout, but ensure it's visible */
+    border-radius: 1px;
 }
 
 .child-message {
-    margin-left: 20px; /* Indent child messages for visual hierarchy */
-    width: calc(100% - 20px); /* Adjust width to account for indentation */
+    word-break: break-word; /* Ensure words break to prevent horizontal overflow */
+    overflow-wrap: break-word; /* Allow long words to be broken and wrapped onto the next line */
 }
 
 .chat-text {
@@ -33,7 +56,6 @@
     line-height: 1.5;
     letter-spacing: 0.00938em;
     color: #000000;
-    display: block; /* Ensures the text displays as a block element, taking the full width */
+    display: block; /* Ensures the text displays as a block element */
     text-align: left; /* Align text to the left */
 }
-

@@ -123,16 +123,22 @@ const Input: React.FC<InputProps> = ({ onSendMessage, isFollowingUp, deselectMes
         ))}
       </div>
       <div className="chat-input-container">
+      <div className="chat-field">
+        <div className='thread-icon-container'>
+            {isFollowingUp &&
+            (<img src="thread-rep.svg" alt="Follow-up in thread" className="follow-up-icon" style={{ display: isFollowingUp ? 'inline' : 'none' }}/>)
+            }
+        </div>
         <div
           ref={editableRef}
           contentEditable
           className="chat-input-content"
           onInput={handleInput}
           onKeyDown={handleKeyDown}
-          data-placeholder={isFollowingUp ? "Follow-up in thread" : "Type here..."}
+          data-placeholder={isFollowingUp ? "Follow-up in thread" : "Ask Duke Atlas..."}
         >
-          <img src="thread-rep.svg" alt="Follow-up" className="follow-up-icon" style={{ display: isFollowingUp ? 'inline' : 'none' }} />
         </div>
+      </div>
         {isTagging && suggestions.length > 0 && (
           <div className="tagging-suggestions">
             {suggestions.map((suggestion, index) => (

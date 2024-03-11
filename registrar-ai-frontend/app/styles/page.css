@@ -75,7 +75,7 @@ body {
     margin-right: auto;
     max-height: 500px; /* Set the maximum height for the chat window */
     overflow-y: auto; /* Enable vertical scrolling if there is overflow */
-  }  
+  }
 
   /* ============= */
   /* ============= TEXT ============= */
