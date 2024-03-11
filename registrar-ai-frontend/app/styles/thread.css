@@ -1,0 +1,39 @@
+  /* thread.css */
+
+  .all-messages {
+    width: 100%; /* Ensure the container takes up the full width */
+    display: flex; /* Use flex layout to organize children */
+    flex-direction: column; /* Stack children vertically */
+    gap: 10px; /* Space between each message */
+}
+
+.message-box {
+    cursor: pointer;
+    width: 100%; /* Ensure each message box takes up full width */
+    display: flex; /* Align items in a flex layout for consistency */
+    align-items: center; /* Center-align the items vertically */
+    padding: 8px; /* Padding inside each message box */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.message-box:hover, .message-box-selected {
+    background-color: rgba(221, 221, 221, 0.5); /* Transparency on hover and when selected */
+    border-radius: 12px;
+}
+
+.child-message {
+    margin-left: 20px; /* Indent child messages for visual hierarchy */
+    width: calc(100% - 20px); /* Adjust width to account for indentation */
+}
+
+.chat-text {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    color: #000000;
+    display: block; /* Ensures the text displays as a block element, taking the full width */
+    text-align: left; /* Align text to the left */
+}
+

@@ -12,11 +12,14 @@ body {
   }
   
 /* main-content */
+/* Updated main-content */
 .main-content {
   width: 85vw;
   height: 100%; /* Set height to 100% of its parent */
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center children horizontally */
+  justify-content: space-between; /* Distribute space between children */
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
@@ -25,16 +28,21 @@ body {
 
   /* Chat Texåt */
   /* Text for chat history */
+  .welcome-text-container {
+    width: 60%;
+    position: relative; /* This makes it the reference point for absolutely positioned children */
+    display: flex; /* Use flex layout to align children */
+    justify-content: center;
+    margin-bottom: auto; /* Push everything else down */
+  }
+  
 .welcome-text {
     font-family: "Roboto", sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 1.5;
     letter-spacing: 0.00938em;
-    color:#000000;
-    padding-left: 160px;
-    padding-right: 160px;
-
+    color:#696969;
   }
 
   /* ========= */
@@ -59,31 +67,19 @@ body {
   /* chat-window */
   /* Where user sent input and system responses are displayed. */
   .chat-window {
-    display: flex; /* Enables Flexbox */
-    align-items: center; /* Vertically centers the items in the container */
-    width: 70%;
-    margin-left: auto; /* Centers the field itself */
-    margin-right: auto; /* Centers the field itself */
+    display: flex; /* Keeps Flexbox layout */
+    flex-direction: column; /* Stacks children vertically */
+    align-items: flex-start; /* Aligns items to the left */
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
     max-height: 500px; /* Set the maximum height for the chat window */
     overflow-y: auto; /* Enable vertical scrolling if there is overflow */
-  }
+  }  
 
   /* ============= */
   /* ============= TEXT ============= */
   /* ============= */
-
-  /* Recommendation Text */
-  /* Text for the chat input options */
-  .recommendation-text {
-    font-family: "Roboto", sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 1.5;
-    letter-spacing: 0.00938em;
-    padding: 0px 5px; /* Horizontal padding */
-    margin: 7px 0;
-    color:#4f4f4f;
-  }
 
   /* Button Text */
   /* Text for the buttons */
@@ -94,17 +90,8 @@ body {
     line-height: 1.5;
     letter-spacing: 0.00938em;
   }
-
-  /* Chat Text */
-  /* Text for chat history */
-  .chat-text {
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.00938em;
-    color:#000000;
-    padding: 0px; /* Horizontal padding */
+  
+  .active-thread {
+    background-color: #f0f0f0; /* Or any other highlight color */
+    /* Other styles for active thread */
   }
-
-

@@ -65,6 +65,7 @@ def generate_openai_response(user_message, courses_info):
         "You are a helpful course registration assistant at Duke University. "
         "Your task is to answer questions about courses confidently and in a friendly manner. "
         "Keep your answers short, concise, and conversational. Only give the user the information they're asking for. "
+        "Adjust capitalization and punctuation as needed. "
         "If the information provided does not allow you to answer a question, respond with 'Sorry, I'm not equipped to answer that question'.'\n\n"
         "Courses Information:\n"
         f"{courses_info}\n\n"

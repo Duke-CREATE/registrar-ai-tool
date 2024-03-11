@@ -1,100 +1,126 @@
 // app/page.tsx
 'use client';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from './components/input';
+import Thread from './components/thread';
 import './styles/page.css';
 
-// ===============
-// =============== CHAT INTERFACE ===============
-// ===============
+interface Message {
+  text: string;
+  fromUser: boolean;
+  threadId?: string;
+  isParent?: boolean; // This doesn't seem to be set in your current logic but conceptual for sorting
+}
 
-// ChatWindow
-// Description: Where user's sent input and system responses are displayed.
-// Contains: None
-// Props: None
-function ChatInterface() {
-  // messages initialized as an empty array
-  const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>([]);
+const ChatInterface: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [selectedMessageIndex, setSelectedMessageIndex] = useState<number | null>(null);
 
-  // asynchronous function handleSendMessage
-  // async keyword indicates that the function will preform asynchronous operations
-  // uses the await keyword to wait for promises to resolve (fetch to complete)
-  const handleSendMessage = async (userMessage: string, tags: string[]) => {
-    if (userMessage.trim() !== '') {
-      // Update messages state to include the new user message
-      setMessages(prevMessages => [...prevMessages, { text: userMessage, fromUser: true }]);
-  
-      // Since state updates are asynchronous, use the updated state for further logic
-      // Here, we directly proceed with sending the message without waiting for the state to update
-      // and construct what the current conversation would be after the update.
-      const currentConversation = [...messages, { text: userMessage, fromUser: true }];
-  
-      try {
-        const response = await fetch('http://127.0.0.1:5000/process_message', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_message: userMessage,
-            tags: tags,
-            conversation_history: currentConversation,
-          }),
-        });
-  
-        if (response.ok) {
-          const responseData = await response.json();
-          if (responseData.response) {
-            setMessages(prevMessages => [...prevMessages, { text: responseData.response, fromUser: false }]);
-            // Note: Storing the entire conversation in session storage might not be the best approach
-            // Consider storing only necessary identifiers or state markers
-          }
-        } else {
-          console.error('Failed to send message');
-        }
-      } catch (error) {
-        console.error('Error sending message:', error);
+  const isFollowingUp = selectedMessageIndex !== null;
+
+  const handleSendMessage = async (userMessage: string, tags: string[], queryType: string) => {
+      let threadId: string | undefined = "";
+      let isParent: boolean = true;
+
+      if (isFollowingUp) {
+          const parentMessage = messages[selectedMessageIndex!];
+          threadId = parentMessage.threadId;
+          isParent = false;
       }
-    }
-  };  
+
+      if (userMessage.trim() !== '') {
+          const newMessage: Message = {
+              text: userMessage,
+              fromUser: true,
+              threadId,
+              isParent,
+          };
+          setMessages(prevMessages => [...prevMessages, newMessage]);
+
+          const payload = {
+              user_message: userMessage,
+              tags: tags,
+              query_type: queryType,
+              conversation_history: isFollowingUp ? messages.filter(msg => msg.threadId === threadId) : [],
+              threadId: threadId,
+          };
+
+          try {
+              const response = await fetch('http://127.0.0.1:5000/process_message', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(payload),
+              });
+
+              if (response.ok) {
+                  const responseData = await response.json();
+                  const responseMessage: Message = {
+                      text: responseData.response,
+                      fromUser: false,
+                      threadId: responseData.threadId,
+                  };
+                  setMessages(prevMessages => [...prevMessages, responseMessage]);
+              } else {
+                  console.error('Failed to send message');
+              }
+          } catch (error) {
+              console.error('Error sending message:', error);
+          }
+      }
+  };
+
+  const deselectMessage = () => {
+      setSelectedMessageIndex(null);
+  };
+
+  const handleThreadClick = (index: number) => {
+      setSelectedMessageIndex(prevIndex => prevIndex === index ? null : index);
+  };
 
   useEffect(() => {
-    const savedMessages = sessionStorage.getItem('conversation_history');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    }
+      const savedMessages = sessionStorage.getItem('conversation_history');
+      if (savedMessages) {
+          setMessages(JSON.parse(savedMessages));
+      }
   }, []);
 
   return (
     <div className="main-content">
-      <p className="welcome-text">
-        Welcome to Duke Atlas, your tool to naviagte your academic world.
-        To reference a specific class, type the @ sign followed by the class name (i.e. @AIPI 520). You can reference multiple classes in the same query.</p>
-        <Input onSendMessage={handleSendMessage} />
-      <div className="chat-window">
-        {messages.map((message, index) => (
-          <p className="chat-text" key={index}>
-            <span style={{fontWeight: 'bold'}}>
-              {message.fromUser ? 'User' : 'Atlas'}:
-            </span>{' '}
-            {message.text}
-          </p>
-        ))}
+      <div className="welcome-text-container">
+        <p className="welcome-text">
+          Welcome to Duke Atlas, your tool to navigate your academic world.
+          To reference a specific class, type the @ sign followed by the class name (i.e. @AIPI 520).
+          You can reference multiple classes in the same query.
+        </p>
       </div>
-    </div>
+      <div className="chat-window">
+                {messages.filter((msg, index, array) => array.findIndex(m => m.threadId === msg.threadId) === index)
+                .map((parentMessage, index) => {
+                    const childMessages = messages.filter(msg => msg.threadId === parentMessage.threadId && msg.isParent !== true);
+                    return (
+                        <Thread 
+                            key={index} 
+                            parentMessage={parentMessage} 
+                            childMessages={childMessages} 
+                            onClick={() => handleThreadClick(index)} 
+                            isThreadActive={selectedMessageIndex === index}
+                        />
+                    );
+                })}
+            </div>
+            <Input 
+                onSendMessage={handleSendMessage}
+                isFollowingUp={isFollowingUp}
+                deselectMessage={deselectMessage}
+            />
+        </div>
   );
 }
 
-// ===============
-// =============== PAGE ===============
-// ===============
+const Page: React.FC = () => { // Correctly annotated return type as React Functional Component
+  return <ChatInterface />;
+};
 
-// Page
-// Description: The page that contains the chat interface
-// Contains: ChatInterface
-// Props: None
-export default function Page() {
-  return (
-    <ChatInterface />
-  );
-}
+export default Page; // Ensure this is correct

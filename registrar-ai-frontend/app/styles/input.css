@@ -3,43 +3,45 @@
   /* ============= */
   
 /* Container div style */
+.input-container {
+  position: relative; /* This makes it the reference point for absolutely positioned children */
+  display: flex; /* Use flex layout to align children */
+  flex-direction: column; /* Arrange children horizontally */
+  justify-content: space-between; /* Center children horizontally in the main axis */
+  align-items: center; /* Center children vertically in the cross axis */
+  width: 60%; /* Take the full width of its parent */
+  margin: 0 auto; /* Center the container within its parent */
+  padding: 8px; /* Add padding around the content for spacing */
+  margin-top: 0px;
+}
+
+
 .chat-input-container {
   position: relative; /* This makes it the reference point for absolutely positioned children */
   display: flex; /* Use flex layout to align children */
-  flex-direction: column; /* Arrange children vertically */
-  justify-content: center; /* Center children horizontally in the main axis */
+  flex-direction: row; /* Arrange children vertically */
+  justify-content: space-between; /* Change this to space-between to push the button to the bottom */
   align-items: center; /* Center children vertically in the cross axis */
-  width: 75%; /* Set the width to 75% of its parent */
-  margin: 0 auto; /* Center the container within its parent */
+  width: 100%; /* Adjust the width as needed, or use auto to fit content */
+  flex-grow: 1; /* Allow it to grow to fill available space */
+  margin-right: 8px; /* Add some margin to separate it from the button */
   padding: 8px; /* Add padding around the content for spacing */
+  height: 100%; /* Make sure the container takes full height of its parent */
 }
 
 /* ContentEditable div style */
 .chat-input-content {
   width: 100%; /* Make the contentEditable div fill the entire width of its container */
-  padding: 8px 12px; /* Add padding inside for the text, a bit more on the left for spacing */
+  padding: 10px 12px 6px; /* Add padding inside for the text, a bit more on the left for spacing */
   border: 2px solid #0024A5; /* Specify border color and thickness */
   border-radius: 12px; /* Rounded corners for the border */
-  min-height: 20px; /* Minimum height to ensure it's visible even if empty */
+  min-height: 24px; /* Minimum height to ensure it's visible even if empty */
   outline: none; /* Remove the default focus outline */
   text-align: left; /* Align the text to the left */
   font-family: 'Arial', sans-serif; /* Set the font family */
   font-size: 16px; /* Set the font size */
   display: block; /* Display block to ensure it fills the width */
 }
-
-
-  /* chat-input-button */
-  /* Button to send user input to system */
-  .send-chat-button {
-    padding: 8px 16px; /* Adjust padding as needed to control button size */
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    /* You can set a width if you want or leave it to be content-sized */
-  }
 
   /* send-chat-field */
   /* Field for user to send input to system */
@@ -65,17 +67,18 @@
 /* Container for tagging suggestions */
 .tagging-suggestions {
   position: absolute;
-  top: 100%; /* Positioned right below the chat-input-content */
+  top: -210px; /* Positioned above the input-container */
   left: 0;
   width: 20%; /* Match the width of chat-input-content */
   padding-left: 16px; /* Match the left padding of chat-input-content for text alignment */
   border: 1px solid #ccc;
-  border-radius: 0 0 8px 8px; /* Rounded corners at the bottom */
+  border-radius: 8px 8px 0 0; /* Rounded corners at the top */
   background-color: #fff;
   max-height: 200px;
   overflow-y: auto;
   box-sizing: border-box;
 }
+
 
 /* Individual options within the tagging suggestions */
 .tagging-option {
@@ -105,4 +108,71 @@
   margin: 0 2px;
 }
 
+.send-chat-button {
+  padding: 12px 16px;
+  background-color: darkblue;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  align-self: center; /* Align button in the center at the bottom */
+}
+
+.query-type-text{
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  color: #000000;
+  padding: 0px;
+  display: block;
+  text-align: left;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-bottom: 4px; /* Add some space between the buttons and the text input */
+  margin-top: 0px;
+}
+
+.query-type-buttons-container {
+  display: flex; /* Apply flexbox to align buttons side by side */
+  justify-content: flex-start; /* Align the buttons horizontally to the left */
+  align-items: flex-end; /* Center the buttons vertically */
+  width: 100%; /* Take the full width to align with the contentEditable div */
+  margin-bottom: 0px; /* Adjust space between the buttons and the contentEditable div as needed */
+  padding: 0px; /* Add padding to the left and right of the buttons */
+  margin-top: 0px;
+}
+
+.query-type-button {
+  padding: 0px 8px; /* Reduce the top and bottom padding */
+  background-color: rgb(255, 255, 255);
+  color: #787878;
+  border: 1px solid #787878;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1; /* Adjust line-height for text inside the button */
+  min-height: 0; /* Ensure there's no minimum height interfering */
+  box-sizing: content-box; /* Adjust box-sizing as needed */
+  height: 24px; /* Set a fixed height for the buttons */
+  margin-right: 4px; /* Add spacing to the right of each button */
+  margin-bottom: 0px;
+}
+
+.query-type-button.active {
+  background-color: darkblue; /* Example: change background to green */
+  color: white; /* Change text color to white */
+}
+
+/* Remove the right margin from the last button to maintain layout */
+.query-type-button:last-child {
+  margin-right: 0;
+}
+
+.follow-up-icon {
+  height: 24px; /* Adjust based on your icon's size */
+  margin-right: 8px; /* Adds some space between the icon and the text input */
+  vertical-align: middle; /* Aligns the icon with the text */
+}
 
