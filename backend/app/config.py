@@ -14,6 +14,7 @@ class Config:
     # Sensitive configs
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
     PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
+    MONGODB_URI = os.environ.get('MONGODB_URI')
     
     # Non-sensitive default configs
     PINECONE_INDEX_NAME = 'duke-course-desc'

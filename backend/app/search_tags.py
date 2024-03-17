@@ -1,4 +1,5 @@
-import sqlite3
+from pymongo import MongoClient
+from .config import Config
 
 def context_from_tags(tags):
     """
@@ -7,40 +8,27 @@ def context_from_tags(tags):
     :param tags: A list of class tags.
     :return: A dictionary containing the class descriptions for each tag.
     """
+    client = MongoClient(Config.MONGODB_URI)
+    db = client['courses']  # Adjust database name as necessary
+    collection = db['fa23-sp24-info']    # Adjust collection name as necessary
     results = {}
-    with sqlite3.connect('data/coursesDB.db') as conn:
-        cursor = conn.cursor()
-        for tag in tags:
-            # split the tag by spaces
-            subject = tag.split()[0]
-            catalog = tag.split()[1]
-            # Use parameterized queries to prevent SQL injection
-            sql = """
-                    SELECT
-                        Descr,
-                        `Course Long Descr`,
-                        `Mtg Start`,
-                        `Mtg End`,
-                        Pat,
-                        `Term Descr`
-                    FROM
-                        courses
-                    WHERE
-                        `Subject` = ? AND `Catalog` = ?
-                  """
-            cursor.execute(sql, (subject, catalog))
 
-            result = cursor.fetchone()
+    for tag in tags:
+        course = collection.find_one({'Code': tag})
+        if course:
+            # Map the MongoDB document fields to the desired format
             result_dict = {
-                'course name': result[0],
-                'course description': result[1],
-                'start time': result[2],
-                'end time': result[3],
-                'days offered': result[4],
-                'term': result[5]
+                'Course Name': course.get('Descr', ''),
+                'Course Description': course.get('Course Long Descr', ''),
+                'Credits': course.get('Max Units'),
+                'Instructor': course.get('PI Name'),
+                'Mode of Instruction': course.get('Mode'),
+                'Start Time': course.get('Mtg Start', ''),
+                'End Time': course.get('Mtg End', ''),
+                'Days Offered': course.get('Pat', ''),
+                'Term Offered': course.get('Term Descr', '')    
             }
-
             # Add result to dictionary of results
             results[tag] = result_dict
-
+    
     return results

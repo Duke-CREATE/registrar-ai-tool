@@ -2,8 +2,8 @@
 from flask import Blueprint, request, jsonify
 from .embed import embed_message
 from .vector_db import fetch_similar_vectors
-from .search_tags import context_from_tags
-from .generate_response import generate_openai_response, create_context
+from .generate_response import generate_openai_response, create_context_reg
+from .handle_query_type import class_info
 import uuid
 from flask_cors import cross_origin
 
@@ -17,78 +17,47 @@ main = Blueprint('main', __name__)
 def process_message():
     # get data
     data = request.get_json()
-    conversation_history = data.get('conversation_history')
+    print(data)
     user_message = data.get('user_message')
-    tags = data.get('tags')
-    if data['threadId'] == '':
+    query_type = data.get('query_type')
+    if not data.get('threadId'):
         thread_id = str(uuid.uuid4())
         data['threadId'] = thread_id
     else:
-        thread_id = data.get('threadId')  # assign new threadID
-    
-    print('DATA BEGIN')
-    print(data)
-    print('DATA END')
+        thread_id = data['threadId']
 
-    # append the user message to the conversation cache (by thread_id)
-    if thread_id in CONVERSATION_CACHE:
-        CONVERSATION_CACHE[thread_id].append({'message': user_message ,'fromUser': True})
+    # HANDLE QUERY TYPES
+    if query_type == 'Class Info':
+        response_thread_id, relevant_info, is_parent = class_info(data, thread_id, CONVERSATION_CACHE)
+        print('relevant info:')
+        print(relevant_info)
+        response = generate_openai_response(user_message, relevant_info)
+    elif query_type == 'Registration':
+        # TODO: build threading for registration
+        # TODO: generate thread id for registration
+        # embed user message
+        embedded_message = embed_message(user_message)
+        # fetch similar vectors from registration vector DB
+        similar_vectors = fetch_similar_vectors(embedded_message, 'registration-vdb', top_k=3, num_candidates=20)
+        print('similar vectors reg')
+        print(similar_vectors)
+        # create context from similar vectors
+        relevant_info = create_context_reg(similar_vectors)
+        print('relevant info registration:')
+        print(relevant_info)
+        # generate openai response
+        response = generate_openai_response(user_message, relevant_info)
+    elif query_type == 'Other':
+        response = generate_openai_response(user_message, "")
     else:
-        CONVERSATION_CACHE[thread_id] = [{'message': user_message ,'fromUser': True}]
-
-    relevant_info = []
-    # if we are in a thread
-    if conversation_history:
-        # response inherits parent thread thread_id
-        response_thread_id = thread_id
-        # response is not a parent
-        is_parent = False
-        print()
-        print('CONVERSATION CACHE START')
-        print(CONVERSATION_CACHE[thread_id])
-        print('CONVERSATION CACHE END')
-        # fetch the conversation history from the cache
-        CONVERSATION_CACHE.setdefault(thread_id, [])  
-        CONVERSATION_CACHE[thread_id].append({'message': user_message, 'context': None ,'fromUser': True})
-        # fetch previous relevant info from the conversation history
-        for msg in CONVERSATION_CACHE[thread_id]:
-            if not msg['fromUser']:
-                relevant_info.append(msg['context'])
-                relevant_info.append(msg['message'])
-            else:
-                relevant_info.append(msg['message'])
-        # if tags are provided, fetch context from tags
-        if tags:
-            tag_context = context_from_tags(tags)
-            relevant_info.extend(tag_context)
-    # else we are not in a thread
-    else:
-        # generate new threadid
-        response_thread_id = str(uuid.uuid4())
-        # response is a parent
-        is_parent = True
-        # if tags are provided, fetch context from tags
-        if tags:
-            relevant_info = context_from_tags(tags)
-        # if no tags are provided, use the user message to fetch similar vectors
-        else:
-            # Embed the user message and fetch similar vectors
-            embedded_message = embed_message(user_message)
-            similar_vectors = fetch_similar_vectors(embedded_message)
-            # Generate context based on similar vectors
-            relevant_info = create_context(similar_vectors)
+        print('Error: Invalid query type')
 
     if not user_message and not relevant_info:
         return jsonify({'error': 'No message provided'}), 400
 
     try:
-        print()
-        print('PREVIOUS RELEVANT INFO START')
-        print(relevant_info)
-        print('PREVIOUS RELEVANT INFO END')
-        response = generate_openai_response(user_message, relevant_info)
+        print(response)
         # append the response to the conversation cache
-        # generate new threadid using current timestamp
         if response_thread_id in CONVERSATION_CACHE:
             CONVERSATION_CACHE[response_thread_id].append({'message': response, 'context': relevant_info, 'fromUser': False})
         else:

@@ -1,35 +1,54 @@
-# vector_db.py
-# Handles interactions with the vector database (Pinecone), like fetching similar vectors.
-import pinecone
-import os
+from pymongo import MongoClient
 from .config import Config
 
-# Initialize Pinecone
-pinecone.init(api_key=Config.PINECONE_API_KEY, environment='gcp-starter')
-
-# Connect to your Pinecone index
-index_name = Config.PINECONE_INDEX_NAME
-index = pinecone.Index(index_name)
-
-def fetch_similar_vectors(embedded_vector, top_k=6):
+def fetch_similar_vectors(embedded_message, db_name, top_k=6, num_candidates=50):
     """
-    Fetches the top_k most similar vectors from the Pinecone index.
+    Fetches the top_k most similar vectors from the MongoDB 'embeddings' collection using vector similarity search.
 
-    :param embedded_vector: The query vector. Type list.
+    :param embedded_message: The query vector. Type list of floats.
     :param top_k: Number of similar vectors to retrieve.
-    :return: A dictionary of similar vectors.
+    :param num_candidates: Number of candidate vectors to evaluate in the search. Higher values increase accuracy but reduce performance.
+    :return: A list of documents with similar vectors.
     """
-    # ensure that embedded_vector is a list
-    if not isinstance(embedded_vector, list):
-        raise TypeError("embedded_vector must be a list")
-    
+    if db_name == 'courses':
+        collection_name = 'fa23-sp24-embeddings'
+        index = 'course_embeddings'
+    elif db_name == 'registration-vdb':
+        collection_name = 'embeddings'
+        index = 'vector_index'
+    else:
+        raise TypeError("Invalid DB name")
+    # ensure that embedded_vector is a list of floats
+    if not isinstance(embedded_message, list) or not all(isinstance(x, float) for x in embedded_message):
+        raise TypeError("embedded_vector must be a list of floats")
+
+    # Connect to MongoDB
+    client = MongoClient(Config.MONGODB_URI)
+    db = client[db_name]  # Adjust database name as necessary
+    collection = db[collection_name]    # Adjust collection name as necessary
+
+    # Create the vector search query
+    query = [
+        {
+            "$vectorSearch": {
+                "index": index,
+                "path": "embedding",
+                "queryVector": embedded_message,
+                "numCandidates": num_candidates,
+                "limit": top_k
+            }
+        }
+    ]
+
+    # Execute the vector search query
     try:
-        query_result = index.query(vector=embedded_vector, top_k=top_k)
-        # Process the query_result as per your application's need
-        return query_result['matches']
+        results = list(collection.aggregate(query))
     except Exception as e:
-        print(f"Error querying Pinecone: {e}")
-        # Handle the exception as appropriate for your application
-        return None
+        print(f"Error performing vector search in MongoDB: {e}")
+        results = []  # Return an empty list in case of error
 
+    # Close the MongoDB connection
+    client.close()
 
+    # Return the list of similar vector documents
+    return results
