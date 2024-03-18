@@ -16,6 +16,7 @@ const ChatInterface: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     // selectedMessageIndex is the index of the message that is currently selected
     const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+    const [isProcessing, setIsProcessing] = useState<boolean>(false); // Add this line
     const parentMessage = messages.find(msg => msg.threadId === selectedThreadId);
     const chatWindowRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +55,8 @@ const ChatInterface: React.FC = () => {
                 conversation_history: parentMessage ? messages.filter(msg => msg.threadId === threadId) : [],
                 threadId: threadId || '',
             };
-
+            
+            setIsProcessing(true); // Disable input field while processing
             try {
                 const response = await fetch('http://127.0.0.1:5000/process_message', {
                     method: 'POST',
@@ -79,6 +81,7 @@ const ChatInterface: React.FC = () => {
             } catch (error) {
                 console.error('Error sending message:', error);
             }
+            setIsProcessing(false); // Re-enable input field after processing
         }
     };
 
@@ -99,40 +102,59 @@ const handleThreadClick = (threadId: string) => {
 
   return (
     <div className="main-content">
-        <div className="welcome-text-container">
-            <p className="welcome-text">
-                Welcome to Duke Atlas, your tool to navigate your academic world.
-                To reference a specific class, type the @ sign followed by the class name (i.e. @AIPI 520).
-                You can reference multiple classes in the same query.
-            </p>
+        <div className="pane-container">
+            <div className="welcome-text-container">
+                <p className="welcome-text">Welcome to Duke Atlas, your tool to navigate your academic world.</p>
+                <p className="welcome-text">Here are a few tips on how to use Atlas:</p>
+                <ul className="welcome-text">
+                    <li>To ask questions about courses, select "Course Info" above the chat field</li>
+                    <li>To ask questions about registration, select "Registration" above the chat field</li>
+                    <li>For other inquiries, select "Other" above the chat field</li>
+                    <li>To reference a specific class, type the '@' sign followed by the class name (i.e. @AIPI 520). You can reference multiple classes in the same query.</li>
+                    <li>To follow-up on an Atlas response, click on the message.</li>
+                </ul>
+            </div>
         </div>
-        <div className="chat-window" ref={chatWindowRef}>
-            {messages
-                // Filter to get only parent messages based on 'isParent' property
-                .filter(msg => msg.isParent)
-                .map((parentMessage, index) => {
-                    // Find child messages for each parent message based on 'threadId'
-                    const childMessages = messages.filter(msg => msg.threadId === parentMessage.threadId && !msg.isParent);
-                    console.log('Parent message:', parentMessage);
-                    console.log('Child messages:', childMessages);
-                    return (
-                        <Thread 
-                            key={parentMessage.threadId} 
-                            parentMessage={parentMessage} 
-                            childMessages={childMessages} 
-                            onClick={() => handleThreadClick(parentMessage.threadId || '')} 
-                            isThreadActive={selectedThreadId === parentMessage.threadId}
-                        />
-                    );
-                })}
+        <div className="center-container">
+            <div className="chat-interface-container">
+                <div className="chat-window" ref={chatWindowRef}>
+                    {messages
+                        // Filter to get only parent messages based on 'isParent' property
+                        .filter(msg => msg.isParent)
+                        .map((parentMessage) => {
+                            // Find child messages for each parent message based on 'threadId'
+                            const childMessages = messages.filter(msg => msg.threadId === parentMessage.threadId && !msg.isParent);
+                            return (
+                                <Thread 
+                                    key={parentMessage.threadId} 
+                                    parentMessage={parentMessage} 
+                                    childMessages={childMessages} 
+                                    onClick={() => handleThreadClick(parentMessage.threadId || '')} 
+                                    isThreadActive={selectedThreadId === parentMessage.threadId}
+                                />
+                            );
+                        })}
+                    {/* Loading indicator at the bottom of the chat */}
+                    {isProcessing && (
+                        <div className="loading-dots">
+                            <strong className="loading-dots-text">Atlas:</strong>
+                            <div className="dot"></div>
+                            <div className="dot"></div>
+                            <div className="dot"></div>
+                        </div>
+                    )}
+                </div>
+                <Input 
+                    onSendMessage={handleSendMessage}
+                    isFollowingUp={parentMessage !== undefined}
+                    deselectMessage={deselectMessage}
+                    isProcessing={isProcessing}
+                />
+            </div>
         </div>
-        <Input 
-            onSendMessage={handleSendMessage}
-            isFollowingUp={parentMessage !== undefined}
-            deselectMessage={deselectMessage}
-        />
-        </div>
-  );
+        <div className="pane-container"></div>
+    </div>
+);
 }
 
 const Page: React.FC = () => { // Correctly annotated return type as React Functional Component

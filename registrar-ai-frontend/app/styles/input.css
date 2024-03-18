@@ -4,15 +4,13 @@
   
 /* Container div style */
 .input-container {
-  position: relative; /* This makes it the reference point for absolutely positioned children */
   display: flex; /* Use flex layout to align children */
   flex-direction: column; /* Arrange children horizontally */
-  justify-content: space-between; /* Center children horizontally in the main axis */
+  justify-content: end; /* Center children horizontally in the main axis */
   align-items: center; /* Center children vertically in the cross axis */
-  width: 60%; /* Take the full width of its parent */
+  width: 100%; /* Take the full width of its parent */
   margin: 0 auto; /* Center the container within its parent */
   padding: 0px; /* Add padding around the content for spacing */
-  margin-top: 0px;
 }
 
 
@@ -142,6 +140,12 @@
   border-radius: 12px;
   cursor: pointer;
   align-self: center; /* Align button in the center at the bottom */
+}
+
+.send-chat-button:disabled {
+  background-color: #cccccc; /* Change the background color to indicate it's disabled */
+  color: #666666; /* Dim the text color */
+  cursor: not-allowed; /* Change the cursor to indicate the button is disabled */
 }
 
 .query-type-text{

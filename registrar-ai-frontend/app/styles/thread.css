@@ -2,7 +2,8 @@
 .all-messages {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Default value, can be omitted */
+    margin-top: auto; /* Only needed if you want to push all content to the bottom */
 }
 
 .message-box {

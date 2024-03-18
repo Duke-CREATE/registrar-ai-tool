@@ -1,9 +1,7 @@
 from flask import current_app
 import uuid
 from .embed import embed_message
-from .vector_db import fetch_similar_vectors
-from .search_tags import context_from_tags
-from .generate_response import create_context, create_context_reg
+from .fetch_db import fetch_similar_vectors, create_context_registration, create_context_classinfo, create_context_tags
 
 def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
     """
@@ -11,7 +9,6 @@ def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
     Input: data, thread_id
     Output: response_thread_id, relevant_info, is_parent
     """
-    conversation_history = data.get('conversation_history')
     user_message = data.get('user_message')
     tags = data.get('tags')
 
@@ -38,7 +35,7 @@ def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
         relevant_info.append('Duke Atlas Chatbot:')
 
         if tags:
-            tag_context = context_from_tags(tags)
+            tag_context = create_context_tags(tags)
             relevant_info.extend(f"Context: {tag_context}")
     # else if we are not in a thread
     else:
@@ -47,30 +44,28 @@ def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
         # response is a parent thread
         is_parent = True
         if tags:
-            relevant_info = context_from_tags(tags)
+            relevant_info = create_context_tags(tags)
         else:
             # create context using similar vectors
             if query_type == 'Class Info':
                 embedded_message = embed_message(user_message) # embed message
                 similar_vectors = fetch_similar_vectors(embedded_message, 'courses') # fetch similar vectors
-                relevant_info = create_context(similar_vectors)
+                relevant_info = create_context_classinfo(similar_vectors)
             elif query_type == 'Registration':
                 embedded_message = embed_message(user_message) # embed message
                 similar_vectors = fetch_similar_vectors(embedded_message, 'registration-vdb') # fetch similar vectors
-                relevant_info = create_context_reg(similar_vectors)
+                relevant_info = create_context_registration(similar_vectors)
             else:
-                raise TypeError('Invalid db_name')
+                raise TypeError('Invalid query type')
 
     return response_thread_id, relevant_info, is_parent
 
-def fetch_other(data, thread_id, cached_thread):
+def fetch_other(thread_id, cached_thread):
     """
     Logic for handling other types of queries.
-    Input: data, thread_id
+    Input: thread_id, cached_thread
     Output: response_thread_id, relevant_info, is_parent
     """
-    conversation_history = data.get('conversation_history')
-
     relevant_info = []
     # if we are in a thread
     if cached_thread:

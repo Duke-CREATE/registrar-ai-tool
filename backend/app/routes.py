@@ -1,5 +1,5 @@
 # routes.py
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify
 import redis
 import json
 from .config import Config
@@ -10,8 +10,12 @@ from flask_cors import cross_origin
 
 main = Blueprint('main', __name__)
 
-# Then later in your code, inside a function or factory where `current_app` is available:
 def get_redis_client():
+    """
+    Initializes and returns redis client
+    Input: None
+    Output: redis client
+    """
     redis_url = Config.CACHE_REDIS_URL  # Use the actual config key for your Redis URL
     return redis.Redis.from_url(redis_url, decode_responses=True)
 
@@ -33,16 +37,12 @@ def process_message():
     redis_client = get_redis_client()
     print('thread id pre cache:', thread_id)
     cached_thread = json.loads(redis_client.get(thread_id) or '[]')
-    print()
-    print('CACHED THREAD:')
-    print(cached_thread)
-    print()
 
-    response = ""  # Initialize response variable
+    response = []  # Initialize response variable
     if query_type in ['Class Info', 'Registration']:
         response_thread_id, relevant_info, is_parent = fetch_class_info_registration(data, thread_id, query_type, cached_thread)
     elif query_type == 'Other':
-        response_thread_id, relevant_info, is_parent = fetch_other(data, thread_id, cached_thread)
+        response_thread_id, relevant_info, is_parent = fetch_other(thread_id, cached_thread)
     else:
         return jsonify({'error': 'Invalid query type'}), 400
 
@@ -50,10 +50,6 @@ def process_message():
         return jsonify({'error': 'No message provided'}), 400
 
     # generate openai response
-    print()
-    print('relevant info:')
-    print(relevant_info)
-    print()
     response = generate_openai_response(user_message, relevant_info)
 
     try:

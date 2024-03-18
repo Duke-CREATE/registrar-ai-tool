@@ -6,9 +6,10 @@ interface InputProps {
   onSendMessage: (message: string, tags: string[], queryType: string) => void;
   isFollowingUp: boolean;
   deselectMessage: () => void;
+  isProcessing: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ onSendMessage, isFollowingUp, deselectMessage }) => {
+const Input: React.FC<InputProps> = ({ onSendMessage, isFollowingUp, deselectMessage, isProcessing }) => {
   const [inputContent, setInputContent] = useState('');
   const [isTagging, setIsTagging] = useState(false);
   const [classes, setClasses] = useState<string[]>([]);
@@ -148,7 +149,9 @@ const Input: React.FC<InputProps> = ({ onSendMessage, isFollowingUp, deselectMes
             ))}
           </div>
         )}
-        <button className="send-chat-button" onClick={onSubmit}>Submit</button>
+        <button className="send-chat-button" onClick={onSubmit} disabled={isProcessing}>
+          Submit
+        </button>
       </div>
     </div>
   );

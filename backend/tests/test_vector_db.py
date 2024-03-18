@@ -4,7 +4,7 @@ import pytest
 import pinecone
 from unittest.mock import patch
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from app.vector_db import fetch_similar_vectors
+from backend.app.fetch_db import fetch_similar_vectors
 from app.config import Config
 
 def test_fetch_similar_vectors_integration():

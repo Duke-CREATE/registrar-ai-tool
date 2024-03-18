@@ -1,7 +1,5 @@
 # embed.py
 # Contains the logic for embedding the user_message using BERT.
-from transformers import BertModel, BertTokenizer
-import torch
 from sentence_transformers import SentenceTransformer
 
 def embed_message(user_message):

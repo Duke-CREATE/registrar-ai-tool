@@ -17,8 +17,13 @@ class Config:
     MONGODB_URI = os.environ.get('MONGODB_URI')
     
     # Non-sensitive default configs
-    # PINECONE_INDEX_NAME = 'duke-course-desc'
-    # PINECONE_ENVIRONMENT = 'gcp-starter'
+    COURSES_DB = 'courses'
+    COURSES_INFO_COLLECTION = 'fa23-sp24-info'
+    COURSES_EMB_COLLECTION = 'fa23-sp24-embeddings'
+    COURSES_EMB_INDEX = 'course_embeddings'
+    REGISTRATION_DB = 'registration-vdb'
+    REGISTRATION_COLLECTION = 'embeddings'
+    REGISTRATION_INDEX = 'vector_index'
 
     # Cache configuration
     CACHE_TYPE = 'RedisCache'

@@ -1,12 +1,6 @@
 /* app/styles/page.css */
-
-/* Reset default margin and padding */
-/* body, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
-    margin: 0;
-    padding: 0;
-  } */
   
-  /* Set a background color for the page */
+/* Set a background color for the page */
 body {
     background-color: #ffffff;
   }
@@ -14,10 +8,10 @@ body {
 /* main-content */
 /* Updated main-content */
 .main-content {
-  width: 85vw;
+  width: 100%;
   height: 100%; /* Set height to 100% of its parent */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center; /* Center children horizontally */
   justify-content: space-between; /* Distribute space between children */
   margin: 0 auto;
@@ -28,54 +22,66 @@ body {
 
   /* Chat Texåt */
   /* Text for chat history */
-  .welcome-text-container {
-    width: 60%;
-    position: relative; /* This makes it the reference point for absolutely positioned children */
+  .pane-container {
+    width: 25%;
+    height: 100%;
+    min-width: 200px; /* Keep your min-width as is to ensure they don't get too small */
     display: flex; /* Use flex layout to align children */
-    justify-content: center;
-    margin-bottom: auto; /* Push everything else down */
+    flex-direction: column;
+    justify-content: flex-start; /* Center-align the children horizontally */
+    /* Removed margin-bottom: auto since it's not necessary for side pane alignment */
   }
-  
+
+/* Welcome text adjustments */
+.welcome-text-container {
+  align-self: flex-start; /* Aligns the container to the start of its parent */
+  text-align: left; /* Ensures text is aligned to the left */
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
 .welcome-text {
-    font-family: "Roboto", sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.00938em;
-    color:#696969;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  color: #696969;
+  list-style-type: disc; /* This is default but reaffirmed here for clarity */
+  padding-left: 20px; /* Adjust as needed for proper bullet indentation */
+}
+
+  /* ============= */
+  /* ============= CHAT INTERFACE ============= */
+  /* ============= */
+
+  .center-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: flex-end; /* Align children to the bottom */
+    height: 100%; /* Ensures the container has a defined height for alignment */
+    width: 50%; /* Explicitly set the width to take up 60% of the parent container */
   }
 
-  /* ========= */
-  /* ================ Chat Interface ================ */
-  /* ========= */
-
-  /* chat-interface */
-  /* General chat interface where the user sends input and receives responses */
-  /* .chat-interface {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    height: 90%;
-    align-items: center;
-  } */
+  .chat-interface-container {
+    width: 100%;
+    max-height: 100%; /* Adjust based on your needs */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
   
-  /* ============= */
-  /* ============= CHAT WINDOW ============= */
-  /* ============= */
 
   /* chat-window */
   /* Where user sent input and system responses are displayed. */
   .chat-window {
-    display: flex; /* Keeps Flexbox layout */
-    flex-direction: column; /* Stacks children vertically */
-    align-items: flex-start; /* Aligns items to the left */
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    max-height: 500px; /* Set the maximum height for the chat window */
-    overflow-y: auto; /* Enable vertical scrolling if there is overflow */
-  }
+    display: flex;
+    flex-direction: column; /* This line is crucial */
+    align-items: end;
+    width: 100%;
+    overflow-y: auto;
+}
+
 
   /* ============= */
   /* ============= TEXT ============= */
@@ -95,3 +101,43 @@ body {
     background-color: #f0f0f0; /* Or any other highlight color */
     /* Other styles for active thread */
   }
+
+  .loading-dots {
+    display: flex;
+    align-items: center; /* This will keep the dots centered vertically within themselves */
+    justify-content: flex-start; /* Aligns the dots themselves to the start (left) */
+    padding-left: 9px;
+    align-self: flex-start; /* Aligns this item to the start (left) of the parent container */
+}
+
+.loading-dots-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  color:#000000;
+}
+
+.loading-dots .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #333; /* or any color you prefer */
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: dot-flashing 1s infinite linear alternate;
+    animation-delay: 0s;
+}
+
+.loading-dots .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-flashing {
+    0% { opacity: 0; }
+    50%, 100% { opacity: 1; }
+}
