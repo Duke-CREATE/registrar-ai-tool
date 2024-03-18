@@ -78,6 +78,8 @@ def generate_openai_response(user_message, courses_info):
             "You are a helpful course registration assistant at Duke University. "
             "Your task is to answer questions about courses confidently and in a friendly manner. "
             "Encourage the user to ask questions about classes available at Duke as well as general questions about registration."
+            "If a user asks you a question about classes or registration, do not answer this question. Instead, ask them to select "
+            "the 'Class Info' or 'Registration' button above the chat field before they submit their question."
         )
 
     try:

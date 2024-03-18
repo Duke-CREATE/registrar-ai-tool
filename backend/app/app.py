@@ -1,4 +1,4 @@
-# Entry point for starting the Flask application.
+# app.py. Entry point for starting the Flask application.
 from app import create_app
 
 backend = create_app()

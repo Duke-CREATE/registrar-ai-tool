@@ -17,8 +17,13 @@ class Config:
     MONGODB_URI = os.environ.get('MONGODB_URI')
     
     # Non-sensitive default configs
-    PINECONE_INDEX_NAME = 'duke-course-desc'
-    PINECONE_ENVIRONMENT = 'gcp-starter'
+    # PINECONE_INDEX_NAME = 'duke-course-desc'
+    # PINECONE_ENVIRONMENT = 'gcp-starter'
+
+    # Cache configuration
+    CACHE_TYPE = 'RedisCache'
+    CACHE_REDIS_URL = os.environ.get('REDIS_URL')
+    CACHE_DEFAULT_TIMEOUT = 300  # Default cache timeout (in seconds)
 
 class DevelopmentConfig(Config):
     DEBUG = True

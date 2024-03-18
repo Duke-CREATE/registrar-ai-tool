@@ -14,12 +14,13 @@ def context_from_tags(tags):
     results = {}
 
     for tag in tags:
+        print(tag)
         course = collection.find_one({'Code': tag})
         if course:
             # Map the MongoDB document fields to the desired format
             result_dict = {
-                'Course Name': course.get('Descr', ''),
-                'Course Description': course.get('Course Long Descr', ''),
+                'Course Name': course.get('Course Name', ''),
+                'Course Description': course.get('Course Description', ''),
                 'Credits': course.get('Max Units'),
                 'Instructor': course.get('PI Name'),
                 'Mode of Instruction': course.get('Mode'),
