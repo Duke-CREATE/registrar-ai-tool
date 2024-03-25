@@ -15,7 +15,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14' # Match the Node.js version to your project requirement
+        node-version: '16' # Match the Node.js version to your project requirement
 
     - name: Change to frontend directory
       run: cd registrar-ai-frontend
@@ -34,4 +34,3 @@ jobs:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./registrar-ai-frontend # Specify the directory to deploy
