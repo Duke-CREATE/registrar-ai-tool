@@ -1,7 +1,8 @@
-# app.py. Entry point for starting the Flask application.
 from app import create_app
+import os
 
 backend = create_app()
 
 if __name__ == '__main__':
-    backend.run(host='localhost', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    backend.run(host='0.0.0.0', port=port, debug=False)  # Set debug=False for production
