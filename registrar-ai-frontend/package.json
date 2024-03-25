@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "vercel-build": "echo Using Next.js version $(next --version) && next build"
   },
   "dependencies": {
     "cors": "^2.8.5",
