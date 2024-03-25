@@ -1,0 +1,37 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'registrar-ai-frontend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Install project dependencies
+        run: |
+          cd registrar-ai-frontend
+          npm install
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }} # Set your VERCEL_TOKEN in your repository's secrets
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }} # Add this if required
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }} # Add this if required
+        run: |
+          cd registrar-ai-frontend
+          vercel --prod --token $VERCEL_TOKEN --confirm
+
