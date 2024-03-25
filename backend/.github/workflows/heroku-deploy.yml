@@ -1,0 +1,44 @@
+name: Build, Push and Deploy Docker to Heroku
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: damedina23/atlas-backend:latest
+
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Log in to Heroku Container Registry
+        run: echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com
+
+      - name: Push Docker image to Heroku Container Registry
+        run: |
+          docker tag damedina23/atlas-backend:latest registry.heroku.com/atlas-backend/web
+          docker push registry.heroku.com/atlas-backend/web
+
+      - name: Release image to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:release web --app atlas-backend

@@ -9,6 +9,7 @@ def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
     Input: data, thread_id
     Output: response_thread_id, relevant_info, is_parent
     """
+    # get data
     user_message = data.get('user_message')
     tags = data.get('tags')
 

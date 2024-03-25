@@ -24,6 +24,8 @@ class Config:
     REGISTRATION_DB = 'registration-vdb'
     REGISTRATION_COLLECTION = 'embeddings'
     REGISTRATION_INDEX = 'vector_index'
+    USER_DATA_DB = 'user_data'
+    USER_DATA_COLLECTION = 'messages'
 
     # Cache configuration
     CACHE_TYPE = 'RedisCache'

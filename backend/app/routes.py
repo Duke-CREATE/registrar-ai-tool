@@ -5,6 +5,7 @@ import json
 from .config import Config
 from .generate_response import generate_openai_response
 from .handle_query_type import fetch_class_info_registration, fetch_other
+from .fetch_db import store_data
 import uuid
 from flask_cors import cross_origin
 
@@ -32,6 +33,9 @@ def process_message():
         data['threadId'] = thread_id
     else:
         thread_id = data['threadId']
+    
+    # Store data in user data
+    store_data(data)
     
     # Initialize Redis client and fetch the relevant thread
     redis_client = get_redis_client()

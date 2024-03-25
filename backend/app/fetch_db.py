@@ -140,3 +140,13 @@ def create_context_classinfo(matches):
             results[course_uuid] = result_dict
 
     return results
+
+def store_data(data):
+    """
+    Store user data in mongoDB collection, where "_id" is the thread_id in the data.
+    """
+    client = MongoClient(Config.MONGODB_URI)
+    db = client[Config.USER_DATA_DB]
+    collection = db[Config.USER_DATA_COLLECTION]
+    collection.insert_one(data)
+    client.close()
