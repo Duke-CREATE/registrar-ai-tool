@@ -107,10 +107,10 @@ const handleThreadClick = (threadId: string) => {
                 <p className="welcome-text">Welcome to Duke Atlas, your tool to navigate your academic world.</p>
                 <p className="welcome-text">Here are a few tips on how to use Atlas:</p>
                 <ul className="welcome-text">
-                    <li>To ask questions about courses, select "Course Info" above the chat field</li>
-                    <li>To ask questions about registration, select "Registration" above the chat field</li>
-                    <li>For other inquiries, select "Other" above the chat field</li>
-                    <li>To reference a specific class, type the '@' sign followed by the class name (i.e. @AIPI 520). You can reference multiple classes in the same query.</li>
+                    <li>To ask questions about courses, select &quot;Course Info&quot; above the chat field</li>
+                    <li>To ask questions about registration, select &quot;Registration&quot; above the chat field</li>
+                    <li>For other inquiries, select &quot;Other&quot; above the chat field</li>
+                    <li>To reference a specific class, type the &quot;@&quot; sign followed by the class name (i.e. @AIPI 520). You can reference multiple classes in the same query.</li>
                     <li>To follow-up on an Atlas response, click on the message.</li>
                 </ul>
             </div>
