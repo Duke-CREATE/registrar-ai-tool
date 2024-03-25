@@ -24,11 +24,14 @@ jobs:
           file: backend/Dockerfile
           push: true
           tags: damedina23/atlas-backend:latest
+          build-args: |
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            REDIS_URL=${{ secrets.REDIS_URL }}
 
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
-        working-directory: ./backend
 
       - name: Log in to Heroku Container Registry
         run: echo ${{ secrets.HEROKU_API_KEY }} | docker login --username=_ --password-stdin registry.heroku.com

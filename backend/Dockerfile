@@ -11,14 +11,22 @@ COPY ./app /app
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Accept build-time environment variables
+ARG OPENAI_API_KEY
+ARG MONGODB_URI
+ARG REDIS_URL
+
+# Set the environment variables inside the container
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+ENV MONGODB_URI=${MONGODB_URI}
+ENV REDIS_URL=${REDIS_URL}
+
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
 # Set environment variables
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
-# Copy your .env file into the Docker container; ensure .env is in the root of your project
-COPY .env /app/
 
 # Run app.py when the container launches
 CMD ["flask", "run"]
