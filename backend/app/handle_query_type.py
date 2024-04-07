@@ -51,6 +51,8 @@ def fetch_class_info_registration(data, thread_id, query_type, cached_thread):
             if query_type == 'Class Info':
                 embedded_message = embed_message(user_message) # embed message
                 similar_vectors = fetch_similar_vectors(embedded_message, 'courses') # fetch similar vectors
+                print('Similar Vectors:')
+                print(similar_vectors)
                 relevant_info = create_context_classinfo(similar_vectors)
             elif query_type == 'Registration':
                 embedded_message = embed_message(user_message) # embed message

@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from .config import Config
+from datetime import datetime
 
 def fetch_similar_vectors(embedded_message, db_name, top_k=6, num_candidates=50):
     """
@@ -11,14 +12,11 @@ def fetch_similar_vectors(embedded_message, db_name, top_k=6, num_candidates=50)
     :return: A list of documents with similar vectors.
     """
     if db_name == 'courses':
-        collection_name = Config.COURSES_EMB_COLLECTION
+        collection_name = Config.COURSES_INFO_COLLECTION
         index = Config.COURSES_EMB_INDEX
     elif db_name == 'registration-vdb':
         collection_name = Config.REGISTRATION_COLLECTION
-        print('collection and index:')
-        print(collection_name)
         index = Config.REGISTRATION_INDEX
-        print(index)
     else:
         raise TypeError("Invalid DB name")
     # ensure that embedded_vector is a list of floats
@@ -112,32 +110,23 @@ def create_context_classinfo(matches):
     """
     results = {}
     
-    # Connect to the MongoDB. Adjust the connection string as necessary.
-    client = MongoClient(Config.MONGODB_URI)
-    db = client['courses']
-    courses_collection = db['fa23-sp24-info']
-    
-    for match in matches:
-        course_uuid = match['_id']
-        
-        # Fetch the course from the MongoDB collection
-        course = courses_collection.find_one({'_id': course_uuid})
-        if course:
-            # Map the MongoDB document fields to the desired format
-            result_dict = {
-                'Course Name': course.get('Course Name', ''),
-                'Code Code': course.get('Code', ''),
-                'Course Description': course.get('Course Description', ''),
-                'Credits': course.get('Max Units'),
-                'Instructor': course.get('PI Name'),
-                'Mode of Instruction': course.get('Mode'),
-                'Start Time': course.get('Mtg Start', ''),
-                'End Time': course.get('Mtg End', ''),
-                'Days Offered': course.get('Pat', ''),
-                'Term Offered': course.get('Term Descr', '')    
-            }
-            # Add result to dictionary of results
-            results[course_uuid] = result_dict
+    for course in matches:
+        course_uuid = course.get('_id')
+        # Map the MongoDB document fields to the desired format
+        result_dict = {
+            'Course Name': course.get('Course Name', ''),
+            'Code Code': course.get('Code', ''),
+            'Course Description': course.get('Course Description', ''),
+            'Credits': course.get('Max Units'),
+            'Instructor': course.get('PI Name'),
+            'Mode of Instruction': course.get('Mode'),
+            'Start Time': course.get('Mtg Start', ''),
+            'End Time': course.get('Mtg End', ''),
+            'Days Offered': course.get('Pat', ''),
+            'Term Offered': course.get('Term Descr', '')    
+        }
+        # Add result to dictionary of results
+        results[course_uuid] = result_dict
 
     return results
 
@@ -148,5 +137,7 @@ def store_data(data):
     client = MongoClient(Config.MONGODB_URI)
     db = client[Config.USER_DATA_DB]
     collection = db[Config.USER_DATA_COLLECTION]
+    # add timestamp to data
+    data['timestamp'] = datetime.now()
     collection.insert_one(data)
     client.close()

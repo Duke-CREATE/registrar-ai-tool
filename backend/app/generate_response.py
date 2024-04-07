@@ -2,7 +2,7 @@
 from .config import Config
 import openai as OpenAI
 
-def generate_openai_response(user_message, courses_info):
+def generate_openai_response(user_message, courses_info, query_type):
     """
     Given the courses_info, generates a response using OpenAI's GPT-3.5 Turbo model.
 
@@ -12,7 +12,9 @@ def generate_openai_response(user_message, courses_info):
     # connect to OpenAI
     client = OpenAI.Client(api_key=Config.OPENAI_API_KEY)
 
-    if courses_info:
+    if query_type == 'Class Info' or query_type == 'Registration':
+        if not courses_info:
+            return "Sorry, I'm not equipped to answer that question."
         # Create the prompt
         context = (
             "You are a helpful course registration assistant at Duke University. "
@@ -20,7 +22,7 @@ def generate_openai_response(user_message, courses_info):
             "Keep your answers short, concise, readable, and conversational. Only give the user the information they're asking for. "
             "Adjust capitalization as needed (no need to use all caps). "
             "If the information provided does not allow you to answer a question, respond with 'Sorry, I'm not equipped to answer that question'. "
-            "For questions about classes, include the course code when possible (i.e. Intro to Machine Learning (\n\n"
+            "For questions about classes, include the course code when possible (i.e. Intro to Machine Learning (ECE 520)\n\n"
             "Courses Information:\n"
             f"{courses_info}\n\n"
             "User Query: "

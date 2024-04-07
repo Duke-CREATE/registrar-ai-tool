@@ -18,9 +18,9 @@ class Config:
     
     # Non-sensitive default configs
     COURSES_DB = 'courses'
-    COURSES_INFO_COLLECTION = 'fa23-sp24-info'
-    COURSES_EMB_COLLECTION = 'fa23-sp24-embeddings'
-    COURSES_EMB_INDEX = 'course_embeddings'
+    COURSES_INFO_COLLECTION = 'fa24-courses'
+    COURSES_EMB_INDEX = 'fa24_index'
+
     REGISTRATION_DB = 'registration-vdb'
     REGISTRATION_COLLECTION = 'embeddings'
     REGISTRATION_INDEX = 'vector_index'

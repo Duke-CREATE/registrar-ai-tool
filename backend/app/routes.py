@@ -45,6 +45,7 @@ def process_message():
     response = []  # Initialize response variable
     if query_type in ['Class Info', 'Registration']:
         response_thread_id, relevant_info, is_parent = fetch_class_info_registration(data, thread_id, query_type, cached_thread)
+        print(relevant_info)
     elif query_type == 'Other':
         response_thread_id, relevant_info, is_parent = fetch_other(thread_id, cached_thread)
     else:
@@ -54,7 +55,7 @@ def process_message():
         return jsonify({'error': 'No message provided'}), 400
 
     # generate openai response
-    response = generate_openai_response(user_message, relevant_info)
+    response = generate_openai_response(user_message, relevant_info, query_type)
 
     try:
         # Append the new user message to the conversation history
