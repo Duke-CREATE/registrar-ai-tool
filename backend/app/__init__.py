@@ -8,19 +8,23 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     
-    # Setup CORS for all routes but specify the origins for security
-    # You can also restrict this to specific routes
-    CORS(app, resources={r"/api/*": {"origins": "https://atlas-frontend-two.vercel.app"}})
+    # Setup CORS explicitly for all origins you use
+    origins = [
+        "https://atlas-frontend-two.vercel.app",
+        "https://atlas-frontend-3yj33u7tu-daniels-projects-a44d4a0e.vercel.app",
+        # Add more origins as needed
+    ]
+    CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)
 
     app.config['CORS_HEADERS'] = 'Content-Type'
 
-    # Configure caching and other app features
+    # Configure and initialize caching to use Redis
     app.config['CACHE_TYPE'] = 'RedisCache'
     app.config['CACHE_REDIS_URL'] = app.config.get('REDIS_URL')
 
     cache = Cache(app)
 
-    # Register blueprints
+    # Import and register your blueprints or routes
     from .routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
