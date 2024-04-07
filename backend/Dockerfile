@@ -4,7 +4,7 @@ FROM python:3.9-slim
 # Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# Copy the entire application directory into the container at /app
 COPY ./app /app
 
 # Install any needed packages specified in requirements.txt
@@ -25,8 +25,10 @@ ENV REDIS_URL=${REDIS_URL}
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
+# Update the FLASK_APP environment variable to point to the new entry file
+ENV FLASK_APP=atlas_app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
-# Run app.py when the container launches
-CMD ["gunicorn", "app:create_app", "--bind", "0.0.0.0:5000", "--workers", "3"]
+# Specify the command to run the application using Gunicorn
+# Update the path to the create_app function accordingly
+CMD ["gunicorn", "atlas_app:create_app", "--bind", "0.0.0.0:5000", "--workers", "3"]
