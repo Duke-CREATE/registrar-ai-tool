@@ -31,4 +31,4 @@ ENV FLASK_RUN_HOST=0.0.0.0
 
 # Specify the command to run the application using Gunicorn
 # Update the path to the create_app function accordingly
-CMD gunicorn "atlas_app:create_app" --bind 0.0.0.0:${PORT:-5000} --workers 3
+CMD gunicorn atlas_app:create_app --bind 0.0.0.0:${PORT:-5000} --workers 3
