@@ -25,7 +25,6 @@ def get_redis_client():
 def process_message():
     # get data
     data = request.get_json()
-    print(data)
     user_message = data.get('user_message')
     query_type = data.get('query_type')
     if data['threadId'] == '':
@@ -39,13 +38,11 @@ def process_message():
     
     # Initialize Redis client and fetch the relevant thread
     redis_client = get_redis_client()
-    print('thread id pre cache:', thread_id)
     cached_thread = json.loads(redis_client.get(thread_id) or '[]')
 
     response = []  # Initialize response variable
     if query_type in ['Class Info', 'Registration']:
         response_thread_id, relevant_info, is_parent = fetch_class_info_registration(data, thread_id, query_type, cached_thread)
-        print(relevant_info)
     elif query_type == 'Other':
         response_thread_id, relevant_info, is_parent = fetch_other(thread_id, cached_thread)
     else:
@@ -66,8 +63,6 @@ def process_message():
         if response:  # Check if there is a system response to append
             cached_thread.append({'message': response, 'context': relevant_info, 'fromUser': False})
             redis_client.set(response_thread_id, json.dumps(cached_thread))  # Store the updated conversation
-        print('response:', response)
-        print('response thread_id:', response_thread_id)
         return jsonify({'response': response, 'threadId': response_thread_id, 'isParent': is_parent})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
