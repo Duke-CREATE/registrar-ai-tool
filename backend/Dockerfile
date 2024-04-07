@@ -5,10 +5,9 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the entire application directory into the container at /app
-COPY ./app /app
+COPY . /app
 
 # Install any needed packages specified in requirements.txt
-COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Accept build-time environment variables
