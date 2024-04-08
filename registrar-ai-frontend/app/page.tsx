@@ -63,8 +63,9 @@ const ChatInterface: React.FC = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials: 'include',  // This line is added to handle credentials like cookies
                     body: JSON.stringify(payload),
-                });
+                });                
 
                 if (response.ok) {
                     const responseData = await response.json();
