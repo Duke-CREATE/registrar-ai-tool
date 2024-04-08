@@ -9,7 +9,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     # Enable CORS globally for all domains and routes
-    CORS(app, resources={r"/*": {"origins": "https://atlas-frontend-two.vercel.app"}}, supports_credentials=True)
+    CORS(app, resources={r"/api/*": {"origins": "https://atlas-frontend-two.vercel.app"}}, supports_credentials=True)
 
     app.config['CORS_HEADERS'] = 'Content-Type'
 
