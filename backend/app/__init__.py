@@ -9,9 +9,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     # Enable CORS globally for all domains and routes
-    CORS(app)
-
-    app.config['CORS_HEADERS'] = 'Content-Type'
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
     # Configure and initialize caching to use Redis
     app.config['CACHE_TYPE'] = 'RedisCache'
