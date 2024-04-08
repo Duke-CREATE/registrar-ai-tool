@@ -21,7 +21,7 @@ def get_redis_client():
     return redis.Redis.from_url(redis_url, decode_responses=True)
 
 @main.route('/process_message', methods=['POST'])
-@cross_origin()
+@cross_origin(origins=["https://atlas-frontend-two.vercel.app"], supports_credentials=True)
 def process_message():
     # get data
     data = request.get_json()
