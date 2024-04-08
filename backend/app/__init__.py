@@ -8,13 +8,8 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     
-    # Setup CORS explicitly for all origins you use
-    origins = [
-        "https://atlas-frontend-two.vercel.app",
-        "https://atlas-frontend-3yj33u7tu-daniels-projects-a44d4a0e.vercel.app",
-        # Add more origins as needed
-    ]
-    CORS(app, resources={r"/*": {"origins": origins}}, supports_credentials=True)
+    # Enable CORS globally for all domains and routes
+    CORS(app, resources={r"/*": {"origins": "https://atlas-frontend-two.vercel.app"}}, supports_credentials=True)
 
     app.config['CORS_HEADERS'] = 'Content-Type'
 

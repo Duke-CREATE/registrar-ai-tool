@@ -23,6 +23,9 @@ def get_redis_client():
 @main.route('/process_message', methods=['POST'])
 @cross_origin(origins=["https://atlas-frontend-two.vercel.app"], supports_credentials=True)
 def process_message():
+    if request.method == 'OPTIONS':
+        # Handles CORS preflight requests; these require no further processing
+        return ('', 204)
     # get data
     data = request.get_json()
     user_message = data.get('user_message')
