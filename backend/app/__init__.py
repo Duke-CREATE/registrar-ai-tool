@@ -7,10 +7,13 @@ from .config import Config
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    
-    # Enable CORS globally for all domains and routes
-    CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://atlas-frontend-two.vercel.app"}})
-    cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+    # Configure CORS with more specific options
+    cors_options = {
+        "origins": ["https://atlas-frontend-two.vercel.app"],
+        "supports_credentials": True
+    }
+    CORS(app, resources={r"/*": cors_options})
 
     # Configure and initialize caching to use Redis
     app.config['CACHE_TYPE'] = 'RedisCache'
