@@ -9,9 +9,9 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     # Configure CORS with more specific options
-    CORS(app, supports_credentials=True, origins=["https://atlas-frontend-two.vercel.app"])
+    CORS(app, supports_credentials=True, origins=["https://atlas-frontend-two.vercel.app"], allow_headers=[
+        'Content-Type', 'Authorization', 'X-Requested-With'], methods=['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'])
     app.config['CORS_HEADERS'] = 'Content-Type'
-
 
     # Configure and initialize caching to use Redis
     app.config['CACHE_TYPE'] = 'RedisCache'
