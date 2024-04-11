@@ -10,6 +10,7 @@ def create_app(config_class=Config):
     
     # Enable CORS globally for all domains and routes
     CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://atlas-frontend-two.vercel.app"}})
+    cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
     # Configure and initialize caching to use Redis
     app.config['CACHE_TYPE'] = 'RedisCache'
