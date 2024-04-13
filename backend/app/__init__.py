@@ -8,10 +8,10 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Configure CORS with more specific options
+    # Configure CORS with specific options
     CORS(app, resources={r"/process_message": {"origins": ["https://atlas-frontend-faav82vd0-daniels-projects-a44d4a0e.vercel.app",
-                                                           "https://atlas-frontend-two.vercel.app/"]}},
-                                                           supports_credentials=True)
+                                                           "https://atlas-frontend-two.vercel.app"]}},
+         supports_credentials=True)
     app.config['CORS_HEADERS'] = 'Content-Type'
 
     # Configure and initialize caching to use Redis
