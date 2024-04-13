@@ -9,7 +9,9 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     # Configure CORS with more specific options
-    CORS(app, resources={r"/process_message": {"origins": "https://atlas-backend-52c8a40a2751.herokuapp.com/process_message"}}, supports_credentials=True)
+    CORS(app, resources={r"/process_message": {"origins": ["https://atlas-frontend-faav82vd0-daniels-projects-a44d4a0e.vercel.app",
+                                                           "https://atlas-frontend-two.vercel.app/"]}},
+                                                           supports_credentials=True)
     app.config['CORS_HEADERS'] = 'Content-Type'
 
     # Configure and initialize caching to use Redis
