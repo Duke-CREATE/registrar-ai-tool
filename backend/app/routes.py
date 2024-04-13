@@ -20,8 +20,8 @@ def get_redis_client():
     redis_url = Config.CACHE_REDIS_URL  # Use the actual config key for your Redis URL
     return redis.Redis.from_url(redis_url, decode_responses=True)
 
-@main.route('/process_message', methods=['POST', 'OPTIONS'])
-@cross_origin(origins="https://atlas-frontend-two.vercel.app", supports_credentials=True)
+@main.route('/process_message', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def process_message():
     if request.method == 'OPTIONS':
         # Handles CORS preflight requests; these require no further processing
