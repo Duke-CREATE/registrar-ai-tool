@@ -1,14 +1,19 @@
 # embed.py
-# Contains the logic for embedding the user_message using BERT.
-from sentence_transformers import SentenceTransformer
-
+import requests
 def embed_message(user_message):
     """
-    embeds the user_message using BERT.
-    
-    :param user_message: The user message to embed. Type string.
-    :return: The embedded message. Type list.
+    Sends a request to the specified Hugging Face model API and returns the response.
+    :param payload: The data to send in the request.
+    :return: The JSON response from the API.
     """
-    model = SentenceTransformer("avsolatorio/GIST-large-Embedding-v0")
-    query_embedding = model.encode([user_message], convert_to_tensor=True).tolist()[0]
-    return query_embedding
+    payload = {
+        "inputs": user_message,
+        "parameters": {}
+    }
+    emb_headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer " + EMBEDDINGS_API_KEY,
+        "Content-Type": "application/json"
+    }
+    response = requests.post(EMBEDDINGS_API_URL, headers=emb_headers, json=payload)
+    return response.json()['embeddings']

@@ -27,6 +27,9 @@ class Config:
     USER_DATA_DB = 'user_data'
     USER_DATA_COLLECTION = 'messages'
 
+    EMBEDDINGS_API_KEY = os.environ.get('EMBEDDINGS_API_KEY')
+    EMBEDDINGS_API_URL = os.environ.get('EMBEDDINGS_API_URL')
+
     # Cache configuration
     CACHE_TYPE = 'RedisCache'
     CACHE_REDIS_URL = os.environ.get('REDIS_URL')
