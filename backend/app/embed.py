@@ -1,5 +1,6 @@
 # embed.py
 import requests
+from .config import Config
 def embed_message(user_message):
     """
     Sends a request to the specified Hugging Face model API and returns the response.
@@ -12,8 +13,8 @@ def embed_message(user_message):
     }
     emb_headers = {
         "Accept": "application/json",
-        "Authorization": "Bearer " + EMBEDDINGS_API_KEY,
+        "Authorization": "Bearer " + Config.EMBEDDINGS_API_KEY,
         "Content-Type": "application/json"
     }
-    response = requests.post(EMBEDDINGS_API_URL, headers=emb_headers, json=payload)
+    response = requests.post(Config.EMBEDDINGS_API_URL, headers=emb_headers, json=payload)
     return response.json()['embeddings']
