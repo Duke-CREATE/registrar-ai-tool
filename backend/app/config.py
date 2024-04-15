@@ -13,8 +13,9 @@ class Config:
 
     # Sensitive configs
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-    PINECONE_API_KEY = os.environ.get('PINECONE_API_KEY')
     MONGODB_URI = os.environ.get('MONGODB_URI')
+    EMBEDDINGS_API_KEY = os.environ.get('EMBEDDINGS_API_KEY')
+    EMBEDDINGS_API_URL = os.environ.get('EMBEDDINGS_API_URL')
     
     # Non-sensitive default configs
     COURSES_DB = 'courses'
@@ -26,9 +27,6 @@ class Config:
     REGISTRATION_INDEX = 'vector_index'
     USER_DATA_DB = 'user_data'
     USER_DATA_COLLECTION = 'messages'
-
-    EMBEDDINGS_API_KEY = os.environ.get('EMBEDDINGS_API_KEY')
-    EMBEDDINGS_API_URL = os.environ.get('EMBEDDINGS_API_URL')
 
     # Cache configuration
     CACHE_TYPE = 'RedisCache'

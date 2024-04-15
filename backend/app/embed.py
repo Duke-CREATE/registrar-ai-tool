@@ -7,6 +7,10 @@ def embed_message(user_message):
     :param payload: The data to send in the request.
     :return: The JSON response from the API.
     """
+    api_key = Config.EMBEDDINGS_API_KEY
+    api_url = Config.EMBEDDINGS_API_URL
+    print(f"API Key: {api_key}")
+    print(f"API URL: {api_url}")
     payload = {
         "inputs": user_message,
         "parameters": {}
