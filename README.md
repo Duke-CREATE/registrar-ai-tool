@@ -12,7 +12,7 @@ The purpose of the Duke Atlas Chatbot is to simplify the course registration pro
 
 ## General Architecture
 
-![Architecture Diagram](arch-diagram.png)
+![Atlas Architecture](atlas-arch.png)
 
 ### Backend
 - **Technology**: Flask (Python)
